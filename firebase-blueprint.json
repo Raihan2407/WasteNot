@@ -1,0 +1,65 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile containing identity, onboarding choices, and cooking achievements",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Unique user ID from Firebase Auth"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Full display name of the user"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Google Profile photo URL"
+        },
+        "selectedRole": {
+          "type": "string",
+          "description": "Selected kitchen persona role from onboarding",
+          "enum": ["Mahasiswa", "Orang tua", "Anak kos", "Profesional"]
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the document was created"
+        },
+        "cookingStats": {
+          "type": "object",
+          "properties": {
+            "kgSaved": {
+              "type": "number",
+              "description": "Total weight of food saved in kg"
+            },
+            "recipesCooked": {
+              "type": "number",
+              "description": "Total number of recipes cooked"
+            }
+          },
+          "required": ["kgSaved", "recipesCooked"]
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "email",
+        "photoURL",
+        "selectedRole",
+        "createdAt",
+        "cookingStats"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "Firestore collection storing user profile data keyed by authenticating user UID"
+    }
+  }
+}

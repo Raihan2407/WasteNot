@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Primitive global helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function existing() {
+      return resource.data;
+    }
+    
+    // Validation helper for User profile documents
+    function isValidUser(data) {
+      return data.uid == request.auth.uid &&
+             data.displayName is string && data.displayName.size() <= 200 &&
+             data.email is string && data.email.size() <= 256 &&
+             data.photoURL is string && data.photoURL.size() <= 2048 &&
+             data.selectedRole is string && (data.selectedRole == 'Mahasiswa' || data.selectedRole == 'Orang tua' || data.selectedRole == 'Anak kos' || data.selectedRole == 'Profesional') &&
+             data.cookingStats is map &&
+             data.cookingStats.kgSaved is number &&
+             data.cookingStats.recipesCooked is number;
+    }
+    
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow list: if false;
+      allow create: if isOwner(uid) && isValidUser(incoming());
+      allow update: if isOwner(uid) && isValidUser(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['selectedRole', 'cookingStats']) ||
+        incoming().diff(existing()).affectedKeys().hasOnly(['cookingStats'])
+      );
+      allow delete: if false;
+    }
+  }
+}
