@@ -41,11 +41,12 @@ Indonesia membuang 20–48 juta ton makanan per tahun
 = 7.29% kontribusi emisi gas rumah kaca nasional
 = 115–184 kg per orang per tahun
 Sumber: Bappenas 2021 · UNEP 2025
-
 WasteNot mengatasi ini dengan cara yang sederhana:
 **Foto → Deteksi → Resep → Masak → Dampak Nyata**
 
 ---
+
+## 🛠️ Tech Stack
 Frontend    : TypeScript + React + Vite
 AI Engine   : Google Gemini 1.5 Flash (Vision + Text)
 Auth        : Firebase Authentication (Google OAuth)
@@ -138,4 +139,3 @@ MIT License — bebas digunakan dan dikembangkan.
 *Built with Google Gemini AI · #JuaraVibeCoding 2026*
 
 </div>
-## 🛠️ Tech Stack
